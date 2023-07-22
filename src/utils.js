@@ -1,4 +1,14 @@
-export function searchTriggers(str, words) {
-    const regex = new RegExp(`\\b${substring}|${substring}\\b`, 'i');
-    return words.some(word => regex.test(word));
+export function searchTriggers(input, words) {
+  input = input.trim();
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i].trim();
+    if (
+      input === word ||
+      input.startsWith(word + " ") ||
+      input.endsWith(" " + word)
+    ) {
+      return true;
+    }
+  }
+  return false;
 }

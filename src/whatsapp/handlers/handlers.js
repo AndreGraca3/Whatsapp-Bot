@@ -108,7 +108,7 @@ export default function handlers(client) {
       return res;
     } catch (e) {
       console.log(e.message);
-      sendReaction(message, e.symbol, 2);
+      sendReaction(message, e.symbol ?? '⚠️', 2);
     }
   }
 

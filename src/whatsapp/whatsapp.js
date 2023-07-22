@@ -1,15 +1,17 @@
 import qrcode from "qrcode-terminal";
+import ffmpeg from "@ffmpeg-installer/ffmpeg";
 import pkg from "whatsapp-web.js";
 import handlersModule from "./handlers/handlers.js";
 const { Client, LocalAuth } = pkg;
 
 const client = new Client({
-  authStrategy: new LocalAuth({dataPath: "../../wwebjs/"}),
-  webVersionCache: {path: "../../wwebjs/"},
+  authStrategy: new LocalAuth({ dataPath: "../../wwebjs/" }),
+  webVersionCache: { path: "../../wwebjs/" },
   puppeteer: {
     headless: true,
-    executablePath: `C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`,
+    executablePath: `/usr/bin/google-chrome-stable`,
   },
+  ffmpegPath: ffmpeg.path,
 });
 
 const handlers = handlersModule(client);
