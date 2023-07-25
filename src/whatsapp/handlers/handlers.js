@@ -43,7 +43,8 @@ export default function handlers(client) {
       return;
 
     const quotedMsg = await message.getQuotedMessage();
-    if (!quotedMsg.hasMedia || !quotedMsg._data.isViewOnce) throw new InvalidUsageError();
+    if (!quotedMsg.hasMedia || !quotedMsg._data.isViewOnce)
+      throw new InvalidUsageError();
     if (!message.fromMe) throw new PermissionDeniedError();
 
     const media = await quotedMsg.downloadMedia();
@@ -61,10 +62,15 @@ export default function handlers(client) {
     if (message.body !== "!sticker") return;
 
     let media;
-    if (message.hasMedia) media = await message.downloadMedia();
-    else if (message.hasQuotedMsg) {
+    if (message.hasMedia) {
+      if (message._data.isViewOnce && !message.fromMe)
+        throw new PermissionDeniedError();
+      media = await message.downloadMedia();
+    } else if (message.hasQuotedMsg) {
       const quotedMsg = await message.getQuotedMessage();
       if (!quotedMsg.hasMedia) throw new InvalidUsageError();
+      if (quotedMsg._data.isViewOnce && !message.fromMe)
+        throw new PermissionDeniedError();
       media = await quotedMsg.downloadMedia();
     } else throw new InvalidUsageError();
 
