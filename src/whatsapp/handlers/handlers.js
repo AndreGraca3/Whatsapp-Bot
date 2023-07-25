@@ -9,7 +9,12 @@ const { PermissionDeniedError, IncompleteOperationError, InvalidUsageError } =
 
 const { MessageMedia } = whatsappModule;
 
-const { SWEATY_TRIGGERS, NOSTALGIA_GROUP_ID, nostalgicMediaPath } = config;
+const {
+  SWEATY_TRIGGERS,
+  PRIVATE_GROUP_ID,
+  NOSTALGIA_GROUP_ID,
+  nostalgicMediaPath,
+} = config;
 
 export default function handlers(client) {
   /**
@@ -31,16 +36,24 @@ export default function handlers(client) {
   }
 
   async function revelio(message) {
-    if (message.body !== "!revelio" || !message.hasQuotedMsg) return;
+    if (
+      (message.body !== "!revelio" && message.body !== "!pvtrevelio") ||
+      !message.hasQuotedMsg
+    )
+      return;
 
     const quotedMsg = await message.getQuotedMessage();
-    if (!quotedMsg.hasMedia) throw new InvalidUsageError();
+    if (!quotedMsg.hasMedia || !quotedMsg._data.isViewOnce) throw new InvalidUsageError();
     if (!message.fromMe) throw new PermissionDeniedError();
 
     const media = await quotedMsg.downloadMedia();
     if (!media) throw new IncompleteOperationError();
 
-    await message.reply(media);
+    await message.reply(
+      media,
+      message.body === "!revelio" ? undefined : PRIVATE_GROUP_ID,
+      { caption: "✨" }
+    );
     return true;
   }
 
@@ -104,11 +117,11 @@ export default function handlers(client) {
   async function handle(message, handler) {
     try {
       const res = await handler(message);
-      sendReaction(message, "✅");
+      if (res) sendReaction(message, "✅"); // TODO: try to change this to an event based approach
       return res;
     } catch (e) {
       console.log(e.message);
-      sendReaction(message, e.symbol ?? '⚠️', 2);
+      sendReaction(message, e.symbol ?? "⚠️", 2);
     }
   }
 
