@@ -3,7 +3,7 @@ require("dotenv").config({path: "../../.env"})
 const SWEATY_TRIGGERS = [
   "ow",
   "overwatch",
-  "pc",
+  "fortnite",
   "pro clubs",
   "clubes profissionais",
   "clubs",

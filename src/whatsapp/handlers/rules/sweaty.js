@@ -1,4 +1,5 @@
 const { searchTriggers } = require("../../../utils.js");
+const { SWEATY_TRIGGERS } = require("../../../config/config.js")
 
 module.exports = async function sweaty(message) {
   if (message.fromMe) return;
@@ -13,6 +14,5 @@ module.exports = async function sweaty(message) {
     sendReaction(message, "👆");
     sendReaction(message, "🛁", 2);
     sendReaction(message, "🥵", 4);
-    return true;
   }
 };

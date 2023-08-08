@@ -14,5 +14,4 @@ module.exports = async function nostalgia(message) {
   const media = MessageMedia.fromFilePath(nostalgicMediaPath + randomMedia);
 
   await message.reply(media, undefined, { caption: "🕓" });
-  return true;
 };

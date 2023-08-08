@@ -20,7 +20,7 @@ Message.prototype.trySendReaction = function sendReaction(
     try {
       await this.react(reaction);
     } catch (e) {
-      console.log("Could not react to message.");
+      console.log("Could not react to message. " + e);
     }
   }, timeout * 1000);
 };

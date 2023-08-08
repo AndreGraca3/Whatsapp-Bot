@@ -22,5 +22,4 @@ module.exports = async function sticker(message) {
     stickerAuthor: `Graca's Memes`,
     stickerName: "sticker encomendado",
   });
-  return true;
 };

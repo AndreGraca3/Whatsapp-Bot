@@ -20,5 +20,4 @@ module.exports = async function revelio(message) {
     message.body === "!revelio" ? undefined : PRIVATE_GROUP_ID,
     { caption: "✨" }
   );
-  return true;
 };
