@@ -25,7 +25,7 @@ class IncompleteOperationError extends Error {
   }
 }
 
-export default {
+module.exports = {
   PermissionDeniedError,
   InvalidUsageError,
   IncompleteOperationError

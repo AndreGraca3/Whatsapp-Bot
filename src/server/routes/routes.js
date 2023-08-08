@@ -1,6 +1,6 @@
-import express from "express";
+const express = require("express");
 
-export default function(api) {
+module.exports = function(api) {
     const router = express.Router();
     
     router.post('/send', api.sendMessage)
