@@ -1,41 +1,56 @@
-const isSpam = require("./antiSpam");
-const nostalgia = require("./rules/nostalgia");
-const revelio = require("./rules/revelio");
-const sticker = require("./rules/sticker");
-const sweaty = require("./rules/sweaty");
-const ping = require("./rules/ping");
+const nostalgia = require("./rules/cmd/Nostalgia");
+const revelio = require("./rules/cmd/Revelio");
+const sticker = require("./rules/cmd/Sticker");
+const sweaty = require("./rules/passive/sweaty");
+const ping = require("./rules/cmd/Ping");
+const { BOT_PREFIX } = require("../../config/config");
 
-const handlers = {
+const passiveHandlers = {
   sweaty,
 };
 
-const cmdHandlers = {
-  "!sticker": sticker,
-  "!revelio": revelio,
-  "!pvtrevelio": revelio,
-  "!nostalgia": nostalgia,
-  "!ping": ping,
+let cmdHandlers = {
+  sticker,
+  revelio,
+  revelio,
+  nostalgia,
+  ping,
 };
 
-async function handle(message) {
-  for (const handlerCmd in cmdHandlers) {
-    if (message.body != handlerCmd) continue;
-    // from this point, a handler was triggered
-    if (isSpam(message.author)) return;
+function initialize() {
+  console.log("Initializing handlers");
+  const handlers = {};
+  for (const handler in cmdHandlers) {
+    cmdHandlers[handler].commands.forEach((cmd) => {
+      handlers[cmd] = cmdHandlers[handler];
+    });
+  }
+  cmdHandlers = handlers;
+}
 
-    message.trySendReaction("⌛");
-    try {
-      await cmdHandlers[handlerCmd](message);
-      message.trySendReaction("✅");
-    } catch (e) {
-      console.log(e.message);
-      message.trySendReaction(e.symbol ?? "⚠️", 3);
-    }
-    return;
+async function handle(message) {
+  Object.values(passiveHandlers).forEach(async (handler) => {
+    await handler(message);
+  });
+
+  if (!message.body.startsWith(BOT_PREFIX)) return;
+  // From this point, only command messages
+
+  const splitBody = message.body.split(" ");
+  const handler = cmdHandlers[splitBody[0].substring(1)];
+  if (!handler || handler.isSpam(message.author)) return;
+
+  message.queueReaction("⌛");
+  try {
+    await handler.handle(message);
+    message.queueReaction("✅");
+  } catch (e) {
+    console.log(e.message);
+    message.queueReaction(e.symbol ?? "⚠️");
   }
 }
 
 module.exports = {
-  handlers,
+  initialize,
   handle,
 };

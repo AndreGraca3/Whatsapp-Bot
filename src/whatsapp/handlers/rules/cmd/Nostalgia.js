@@ -1,0 +1,27 @@
+const {
+  NOSTALGIA_GROUP_ID,
+  nostalgicMediaPath,
+} = require("../../../../config/config.js");
+const { MessageMedia } = require("whatsapp-web.js");
+const { promises } = require("fs");
+const Handler = require("../../Handler");
+
+class Nostalgia extends Handler {
+  constructor() {
+    super();
+    this.commands = ["nostalgia"];
+  }
+
+  async handle(message) {
+    if (!message.fromMe && message.from != NOSTALGIA_GROUP_ID) return;
+    const nostalicMedia = await promises.readdir(nostalgicMediaPath);
+    const randomMedia =
+      nostalicMedia[Math.floor(Math.random() * nostalicMedia.length)];
+
+    const media = MessageMedia.fromFilePath(nostalgicMediaPath + randomMedia);
+
+    await message.reply(media, undefined, { caption: "🕓" });
+  }
+}
+
+module.exports = new Nostalgia();
