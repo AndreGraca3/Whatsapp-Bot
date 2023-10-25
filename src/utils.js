@@ -24,7 +24,7 @@ function formatTime(seconds) {
   return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
 }
 
-const delay = (time = 2000) =>
+const delay = (time = 1000) =>
   new Promise((resolve, reject) => setTimeout(resolve, time));
 
 module.exports = {

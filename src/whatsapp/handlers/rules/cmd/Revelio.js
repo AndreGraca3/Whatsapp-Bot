@@ -13,6 +13,7 @@ class Revelio extends Handler {
   }
 
   async handle(message) {
+    if (!message.hasQuotedMsg) throw new InvalidUsageError();
     const quotedMsg = await message.getQuotedMessage();
     if (!quotedMsg.hasMedia || !quotedMsg._data.isViewOnce)
       throw new InvalidUsageError();

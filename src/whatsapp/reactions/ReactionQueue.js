@@ -8,7 +8,7 @@ class ReactionQueue {
     this.queue = async.queue(async (task, callback = () => {}) => {
       const { message, reaction } = task;
       await message.trySendReaction(reaction);
-      await delay();
+      await delay(10);
     }, 1);
   }
 
