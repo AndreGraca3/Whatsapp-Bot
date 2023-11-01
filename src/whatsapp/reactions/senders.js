@@ -41,5 +41,17 @@ Message.prototype.trySendReactions = async function (reactions, timeoutBetween) 
  * @returns {void}
  */
 Message.prototype.queueReaction = async function (reaction) {
-    messsageQueue.enqueue(this, reaction);
+  messsageQueue.enqueue(this, reaction);
+};
+
+/**
+ * Sends a message and reacts to it
+ * @param {string} content - The content of the message to be sent.
+ * @param {Array} reactions - The reactions to be added in order. Default is ["🤖"].
+ * @returns {Promise<Message>} - A Promise that resolves to the sent message.
+ */
+Message.prototype.sendReactedMessage = async function (content, reactions = ["🤖"], caption) {
+  const message = await this.reply(content, undefined, caption);
+  await message.trySendReactions(reactions);
+  return message;
 };

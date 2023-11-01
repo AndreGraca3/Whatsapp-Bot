@@ -1,12 +1,12 @@
 const nostalgia = require("./rules/cmd/Nostalgia");
 const revelio = require("./rules/cmd/Revelio");
 const sticker = require("./rules/cmd/Sticker");
-const sweaty = require("./rules/passive/sweaty");
+const reactPattern = require("./rules/passive/reactPattern");
 const ping = require("./rules/cmd/Ping");
 const { BOT_PREFIX } = require("../../config/config");
 
 const passiveHandlers = {
-  sweaty,
+  reactPattern,
 };
 
 let cmdHandlers = {

@@ -18,7 +18,9 @@ class Nostalgia extends Handler {
     const randomMedia =
       nostalicMedia[Math.floor(Math.random() * nostalicMedia.length)];
 
-    const media = MessageMedia.fromFilePath(`${nostalgicMediaPath}/${randomMedia}`);
+    const media = MessageMedia.fromFilePath(
+      `${nostalgicMediaPath}/${randomMedia}`
+    );
 
     await message.reply(media, undefined, { caption: "🕓" });
   }

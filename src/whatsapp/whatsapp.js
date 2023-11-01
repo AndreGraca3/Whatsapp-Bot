@@ -2,7 +2,8 @@ const qrcode = require("qrcode-terminal");
 const ffmpeg = require("@ffmpeg-installer/ffmpeg");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const handlers = require("./handlers/handlers.js");
-require("./reactions/senders.js")
+const { MAIN_GROUP_ID } = require("../config/config.js");
+require("./reactions/senders.js");
 
 const client = new Client({
   authStrategy: new LocalAuth({ dataPath: "../../wwebjs/" }),
@@ -22,6 +23,15 @@ client.on("qr", async (qr) => {
 
 client.on("ready", () => {
   console.log("Bot is ready!");
+
+  // Halloween
+  if (false) {
+    client.getChatById(MAIN_GROUP_ID).then((chat) => {
+      setInterval(async () => {
+        await chat.sendStateTyping();
+      }, 25000 * 2);
+    });
+  }
 });
 
 client.on("message_create", async (message) => {

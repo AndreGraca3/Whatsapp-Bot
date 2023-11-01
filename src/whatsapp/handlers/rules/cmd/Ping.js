@@ -22,7 +22,7 @@ class Ping extends Handler {
       chat.isGroup ? chat.name : undefined,
       message.deviceType
     );
-    await message.reply(template);
+    await message.sendReactedMessage(template);
   }
 }
 
