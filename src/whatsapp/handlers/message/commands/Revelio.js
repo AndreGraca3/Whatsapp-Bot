@@ -4,12 +4,11 @@ const {
   IncompleteOperationError,
   InvalidUsageError,
 } = require("../../../exceptions/exceptions.js");
-const Handler = require("../../Handler");
+const Command = require("./Command.js");
 
-class Revelio extends Handler {
+class Revelio extends Command {
   constructor() {
-    super();
-    this.commands = ["revelio", "pvtrevelio"];
+    super("Reveal view once media");
   }
 
   async handle(message) {
@@ -22,12 +21,13 @@ class Revelio extends Handler {
     const media = await quotedMsg.downloadMedia();
     if (!media) throw new IncompleteOperationError();
 
-    await message.reply(
+    await message.replyWithReactions(
       media,
-      message.body === "!revelio" ? undefined : PRIVATE_GROUP_ID,
-      { caption: "✨" }
+      ["✨"]
     );
   }
 }
 
-module.exports = new Revelio();
+module.exports = {
+  command: new Revelio(),
+}

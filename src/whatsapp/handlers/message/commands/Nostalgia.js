@@ -4,12 +4,11 @@ const {
 } = require("../../../../config/config.js");
 const { MessageMedia } = require("whatsapp-web.js");
 const { promises } = require("fs");
-const Handler = require("../../Handler");
+const Command = require("./Command.js");
 
-class Nostalgia extends Handler {
+class Nostalgia extends Command {
   constructor() {
-    super();
-    this.commands = ["nostalgia"];
+    super("Send nostalgic media (only in nostalgia group)");
   }
 
   async handle(message) {
@@ -22,8 +21,10 @@ class Nostalgia extends Handler {
       `${nostalgicMediaPath}/${randomMedia}`
     );
 
-    await message.reply(media, undefined, { caption: "🕓" });
+    await message.replyWithReactions(media, ["🕓"]);
   }
 }
 
-module.exports = new Nostalgia();
+module.exports = {
+  command: new Nostalgia(),
+};

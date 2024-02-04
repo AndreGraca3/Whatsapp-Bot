@@ -8,7 +8,7 @@ Feel free to modify it or make a pull request if you want. 🙂
 
 ### ⚙️ Installation
 To start using it, change the extension of the .env.example file to just .env and start filling up those configuration values.  
-If you wish to not use any of the handler functions/rules, please remove them from handlers/cmdHandlers object in [handlers.js](src/whatsapp/handlers/handlers.js)
+If you wish to not use any of the handler functions/rules, please remove them from cmdHandlers object in [handlers.js](src/whatsapp/handlers/handleMessage.js)
 
 ### ⚠️ Fair Note
 The API used here is not the official Whatsapp-API, I do **NOT** take any responsibilty for good/bad use of this tool.  

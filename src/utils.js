@@ -1,4 +1,3 @@
-
 /**
  * Searches for triggers in a string
  * @param {string} input - The string to be searched.
@@ -29,11 +28,37 @@ function formatTime(seconds) {
   return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
 }
 
-const delay = (time = 1000) =>
-  new Promise((resolve, reject) => setTimeout(resolve, time));
+/*
+ * Returns a string representing the time since a given timestamp
+ * @param {number} seconds - The timestamp in seconds
+ * @returns {string} - The time since the timestamp, in the format "1 year", "2 months", "3 days", etc.
+ */
+function timeSince(seconds) {
+  const intervals = [
+    { label: "year", seconds: 31536000 },
+    { label: "month", seconds: 2592000 },
+    { label: "day", seconds: 86400 },
+    { label: "hour", seconds: 3600 },
+    { label: "minute", seconds: 60 },
+    { label: "second", seconds: 1 },
+  ];
+
+  for (let i = 0; i < intervals.length; i++) {
+    const interval = intervals[i];
+    const intervalCount = Math.floor(seconds / interval.seconds);
+    if (intervalCount > 0) {
+      const label = interval.label + (intervalCount > 1 ? "s" : "");
+      return `${intervalCount} ${label}`;
+    }
+  }
+  return "now";
+}
+
+const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 module.exports = {
   searchTriggers,
   formatTime,
+  timeSince,
   delay,
 };

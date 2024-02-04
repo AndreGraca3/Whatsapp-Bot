@@ -1,11 +1,10 @@
-const { formatTime } = require("../../../../utils");
-const Handler = require("../../Handler");
+const { timeSince } = require("../../../../utils");
+const Command = require("./Command");
 
-class Ping extends Handler {
+class Ping extends Command {
   constructor() {
-    super();
-    this.timeout = 5;
-    this.commands = ["ping"];
+    super("Show bot status");
+    this.timeout = 5000;
   }
 
   async handle(message) {
@@ -22,17 +21,19 @@ class Ping extends Handler {
       chat.isGroup ? chat.name : undefined,
       message.deviceType
     );
-    await message.sendReactedMessage(template);
+    await message.replyWithReactions(template);
   }
 }
 
 function getTemplate(ping, name, chatName, deviceType) {
   return `Pong! 🏓
-  🟢 Online for ${formatTime(process.uptime())}
+  🟢 Online for ${timeSince(process.uptime())}
   📡 ${ping}ms
   🕒 ${new Date().toLocaleTimeString("pt-PT")}
   🙋‍♂️ ${name}${chatName ? `\n  👥 ${chatName}` : ""}
   📱 ${deviceType}`;
 }
 
-module.exports = new Ping();
+module.exports = {
+  command: new Ping(),
+}

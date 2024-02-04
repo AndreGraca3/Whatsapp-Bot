@@ -1,6 +1,7 @@
-require("dotenv").config({path: "../../.env"})
+require("dotenv").config({path: "./.env"})
 
-module.exports = {
+const config = {
+  TOKEN: process.env.TOKEN,
   PORT: process.env.PORT,
   BOT_PREFIX: process.env.BOT_PREFIX,
   PRIVATE_GROUP_ID: process.env.PRIVATE_GROUP_ID,
@@ -9,3 +10,13 @@ module.exports = {
   nostalgicMediaPath: process.env.NOSTALGIC_MEDIA_PATH,
   fortniteMediaPath: process.env.FORTNITE_MEDIA_PATH,
 };
+
+function validateConfig() {
+  Object.entries(config).forEach(([key, value]) => {
+    if (!value) throw new Error(`Missing config value for ${key}`);
+  });
+}
+
+validateConfig();
+
+module.exports = config;

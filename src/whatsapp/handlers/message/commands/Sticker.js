@@ -3,12 +3,13 @@ const {
   IncompleteOperationError,
   InvalidUsageError,
 } = require("../../../exceptions/exceptions.js");
-const Handler = require("../../Handler");
+const Command = require("./Command.js");
 
-class Sticker extends Handler {
+class Sticker extends Command {
   constructor() {
-    super();
-    this.commands = ["sticker"];
+    super(
+      "Create a sticker from media attached in the message or a quoted one"
+    );
   }
 
   async handle(message) {
@@ -24,7 +25,7 @@ class Sticker extends Handler {
 
     if (!media) throw new IncompleteOperationError();
 
-    await message.reply(media, undefined, {
+    await message.replyWithReactions(media, undefined, undefined, {
       sendMediaAsSticker: true,
       stickerAuthor: `Graca's Memes`,
       stickerName: "sticker encomendado",
@@ -32,4 +33,6 @@ class Sticker extends Handler {
   }
 }
 
-module.exports = new Sticker();
+module.exports = {
+  command: new Sticker(),
+};

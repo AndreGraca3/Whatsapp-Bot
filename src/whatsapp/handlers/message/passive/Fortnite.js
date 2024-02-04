@@ -1,25 +1,25 @@
-const Handler = require("../../../../Handler");
+const Handler = require("./Processor");
 const { MessageMedia } = require("whatsapp-web.js");
 const { promises } = require("fs");
-const { fortniteMediaPath } = require("../../../../../../config/config.js");
+const { fortniteMediaPath } = require("../../../../config/config.js");
+
+let fortniteMedia;
+promises.readdir(fortniteMediaPath).then((media) => {
+  fortniteMedia = media; // change to sync version
+});
 
 class Fortnite extends Handler {
   constructor() {
-    super();
-    this.commands = ["fortnite", "fort"];
-    this.timeout = 10;
+    super(["fortnite", "fort"]);
   }
 
   async handle(message) {
-    const randomEmojis = getRandomEmojis(FORTNITE_EMOJIS, 2);
-    
-    const fortniteMedia = await promises.readdir(fortniteMediaPath);
     const randomMedia =
       fortniteMedia[Math.floor(Math.random() * fortniteMedia.length)];
 
-    const audioMsg = await message.sendReactedMessage(
+    const audioMsg = await message.replyWithReactions(
       MessageMedia.fromFilePath(`${fortniteMediaPath}/${randomMedia}`),
-      ["⏮️"].concat(randomEmojis)
+      getRandomEmojis(FORTNITE_EMOJIS, 1)
     );
   }
 }
@@ -29,6 +29,6 @@ function getRandomEmojis(emojisArray, count) {
   return shuffledEmojis.slice(0, count);
 }
 
-const FORTNITE_EMOJIS = ["🕒", "✨", "🎮", "🎉", "❤️", "🙌"];
+const FORTNITE_EMOJIS = ["👋"];
 
 module.exports = new Fortnite();
