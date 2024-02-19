@@ -3,7 +3,6 @@ const ffmpeg = require("@ffmpeg-installer/ffmpeg");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const messageHandlers = require("./handlers/message/handleMessage.js");
 require("./senders.js");
-// const ReactionQueue = require("./senders.js");
 
 const client = new Client({
   authStrategy: new LocalAuth({ dataPath: "./wwebjs/" }),
@@ -29,9 +28,7 @@ client.on("ready", () => {
 client.on("message_create", async (message) => {
   // console.log(`chatId: ` + (await message.getChat()).id._serialized);  // Find chatId
   if (Date.now() / 1000 - message.timestamp > 30) return; // verify if message is new
-  // message.reactionQueue = new ReactionQueue(message);
   await messageHandlers.handle(message);
-  // delete message.reactionQueue;
 });
 
 client.on("message_reaction", async (reaction) => {

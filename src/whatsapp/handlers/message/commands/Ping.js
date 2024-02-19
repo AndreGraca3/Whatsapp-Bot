@@ -4,7 +4,6 @@ const Command = require("./Command");
 class Ping extends Command {
   constructor() {
     super("Show bot status");
-    this.timeout = 5000;
   }
 
   async handle(message) {
@@ -26,9 +25,12 @@ class Ping extends Command {
 }
 
 function getTemplate(ping, name, chatName, deviceType) {
+  const { version } = require("../../../../../package.json");
+
   return `Pong! 🏓
   🟢 Online for ${timeSince(process.uptime())}
   📡 ${ping}ms
+  🔢 v${version}
   🕒 ${new Date().toLocaleTimeString("pt-PT")}
   🙋‍♂️ ${name}${chatName ? `\n  👥 ${chatName}` : ""}
   📱 ${deviceType}`;

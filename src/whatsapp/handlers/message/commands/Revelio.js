@@ -16,7 +16,7 @@ class Revelio extends Command {
     const quotedMsg = await message.getQuotedMessage();
     if (!quotedMsg.hasMedia || !quotedMsg._data.isViewOnce)
       throw new InvalidUsageError();
-    if (!message.fromMe) throw new PermissionDeniedError();
+    if (!message.fromMe && message.author != quotedMsg.author) throw new PermissionDeniedError();
 
     const media = await quotedMsg.downloadMedia();
     if (!media) throw new IncompleteOperationError();

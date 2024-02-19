@@ -4,7 +4,6 @@ const Command = require("./Command");
 class Help extends Command {
   constructor(commands) {
     super("Show available commands");
-    this.timeout = 5000;
     this.availableCommands = commands;
   }
 
@@ -28,7 +27,7 @@ class Help extends Command {
         .map(([name, cmd]) => `> *${BOT_PREFIX}${name}* - ${cmd.description}`)
         .join(
           "\n"
-        )}\n\nType *${BOT_PREFIX}help [command]* to get more info about a specific command`,
+        )}\n\nGeneral Usage: <command> [options]\n\nType *<command> --help* to get more info about a specific command`,
       ["❓", "🤖"]
     );
   }

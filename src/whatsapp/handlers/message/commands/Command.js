@@ -6,6 +6,7 @@ class Command {
     this.description = description;
     this.users = {};
     this.permissions = []; // TODO
+    this.options = {};
   }
 
   async handle(message) {
@@ -21,10 +22,6 @@ class Command {
 
   getUsageHelp() {
     return `${BOT_PREFIX}${this.constructor.name.toLowerCase()}`;
-  }
-
-  getOptionsHelp() {
-    return;
   }
 
   isSpam(author) {

@@ -1,3 +1,4 @@
+const yargs = require("yargs");
 const { BOT_PREFIX } = require("../../../config/config");
 const statsData = require("../../data/statsData");
 
@@ -6,31 +7,58 @@ const { command: nostalgia } = require("./commands/Nostalgia");
 const { command: revelio } = require("./commands/Revelio");
 const { command: sticker } = require("./commands/Sticker");
 const { command: ping } = require("./commands/Ping");
+const { command: imagine } = require("./commands/Imagine");
 const { Help } = require("./commands/Help");
 const { Stats, command: stats } = require("./commands/Stats");
 // passive handlers
 const reactor = require("./passive/Reactor");
 const vomit = require("./passive/Vomit");
-const fortnite = require("./passive/Fortnite");
 
 const passiveHandlers = {
   reactor,
   vomit,
-  // fortnite,
 };
 
 const cmdHandlers = {
   sticker,
+  imagine,
   revelio,
   ping,
   nostalgia,
   stats,
 };
 
+const cmdProcessor = yargs
+  .scriptName("") // Removes the script name from usage output
+  .version(false)
+  .usage("Usage: <command> [options]")
+  .help(false);
+
 function initializeCommands() {
   if (BOT_PREFIX.length > 1) {
     throw new Error("Invalid BOT_PREFIX: must be a single character");
   }
+  // register commands to yargs
+  Object.values(cmdHandlers)
+    .map((handler) => ({
+      command: BOT_PREFIX + handler.constructor.name.toLowerCase(),
+      describe: handler.description,
+      builder: (yargs) => {
+        yargs.option("help", {
+          alias: "h",
+          description: "Show help",
+          type: "boolean",
+        });
+        if (handler.options) {
+          Object.entries(handler.options).forEach(([key, value]) => {
+            yargs.option(key, value);
+          });
+        }
+      },
+    }))
+    .forEach((command) => {
+      cmdProcessor.command(command);
+    });
   Object.assign(cmdHandlers, { help: new Help(cmdHandlers) });
 }
 
@@ -49,12 +77,16 @@ async function handle(message) {
   // From this point, only command messages
 
   const splitBody = message.body.toLowerCase().split(" ");
-  const handler = cmdHandlers[splitBody[0].substring(1)];
+  const commandName = splitBody[0].substring(1);
+  const handler = cmdHandlers[commandName];
   if (!handler || handler.isSpam(message.author)) return;
 
   await message.trySendReaction("⌛");
+  const args = cmdProcessor.parse(splitBody);
   try {
-    await handler.handle(message);
+    if (args.help)
+      await message.replyWithReactions(await cmdProcessor.getHelp());
+    else await handler.handle(message, args);
     await message.trySendReaction("✅");
 
     // store usage stats for all functional commands

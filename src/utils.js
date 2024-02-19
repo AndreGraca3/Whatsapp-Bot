@@ -1,3 +1,5 @@
+const async = require("async");
+
 /**
  * Searches for triggers in a string
  * @param {string} input - The string to be searched.
@@ -56,9 +58,30 @@ function timeSince(seconds) {
 
 const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
+/**
+ * A queue for async tasks.
+ */
+class Queue {
+  constructor(delayTime) {
+    this.queue = async.queue(async (task, callback = () => {}) => {
+      await task();
+      await delay(delayTime);
+    }, 1);
+  }
+
+  enqueue(task) {
+    this.queue.push(task);
+  }
+
+  isEmpty() {
+    return this.queue.length == 0;
+  }
+}
+
 module.exports = {
   searchTriggers,
   formatTime,
   timeSince,
   delay,
+  Queue,
 };

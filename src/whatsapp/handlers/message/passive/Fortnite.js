@@ -17,7 +17,7 @@ class Fortnite extends Handler {
     const randomMedia =
       fortniteMedia[Math.floor(Math.random() * fortniteMedia.length)];
 
-    const audioMsg = await message.replyWithReactions(
+    await message.replyWithReactions(
       MessageMedia.fromFilePath(`${fortniteMediaPath}/${randomMedia}`),
       getRandomEmojis(FORTNITE_EMOJIS, 1)
     );
