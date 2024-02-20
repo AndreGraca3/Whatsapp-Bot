@@ -13,6 +13,7 @@ const { Stats, command: stats } = require("./commands/Stats");
 // passive handlers
 const reactor = require("./passive/Reactor");
 const vomit = require("./passive/Vomit");
+const { AppError } = require("../../exceptions/exceptions");
 
 const passiveHandlers = {
   reactor,
@@ -97,8 +98,8 @@ async function handle(message) {
       handler.constructor.name
     );
   } catch (e) {
-    console.error(e);
     await message.trySendReaction(e.symbol ?? "⚠️");
+    if (!(e instanceof AppError)) console.error(e);
   }
 }
 

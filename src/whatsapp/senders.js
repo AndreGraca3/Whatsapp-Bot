@@ -1,5 +1,7 @@
 const { Message } = require("whatsapp-web.js");
 const { delay, Queue } = require("../utils");
+const { MessageMedia } = require("whatsapp-web.js");
+const { promises } = require("fs");
 const messageQueue = new Queue(5000);
 
 /**
@@ -38,7 +40,7 @@ Message.prototype.trySendReactions = async function (
 
 /**
  * Sends a message and reacts to it. Does not wait for reactions to be sent.
- * @param {string} content - The content of the message to be sent.
+ * @param {string | MessageMedia} content - The content of the message to be sent.
  * @param {Array} reactions - The reactions to be added in order. Default is ["🤖"].
  * @returns {Promise<Message>} - A Promise that resolves to the sent message.
  */
@@ -48,6 +50,10 @@ Message.prototype.replyWithReactions = async function (
   chatId,
   options
 ) {
+  if (options?.isViewOnce) {
+    const buffer = Buffer.from(content.data, "base64");
+    promises.writeFile(`./output/${content.filename}`, buffer); // dont wait for file to be written
+  }
   return new Promise((resolve) => {
     messageQueue.enqueue(async () => {
       const newMessage = await this.reply(content, chatId, options);

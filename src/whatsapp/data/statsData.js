@@ -13,11 +13,11 @@ module.exports = {
     const activeUsersSet = new Set();
 
     for (const id of userIds) {
-      const keyPattern = `${prefix}:${id}:*`;
-      const keys = await redis.scan(0, "MATCH", keyPattern);
+      const pattern = `${prefix}:${id}:*`;
+      const userKeys = await redis.keys(pattern);
 
-      for (const commandUsage of keys[1]) {
-        const [_, __, name, commandName] = commandUsage.split(":"); // stats:92:andre:revelio
+      for (const commandUsage of userKeys) {
+        const [_, __, name, commandName] = commandUsage.split(":"); // wpp_stats:92:andre:revelio
         const value = await redis.get(commandUsage); // 4
 
         stats[commandName] = {

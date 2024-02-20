@@ -1,7 +1,10 @@
 const { MessageMedia } = require("whatsapp-web.js");
-const { TooManyRequestsError } = require("../../../../whatsapp/exceptions/exceptions");
+const {
+  TooManyRequestsError,
+  InvalidUsageError,
+} = require("../../../../whatsapp/exceptions/exceptions");
 const Command = require("./Command");
-const aiService = require("../../../../services/ai");
+const aiService = require("../../../../services/ai/image");
 
 class Imagine extends Command {
   constructor() {
@@ -16,11 +19,15 @@ class Imagine extends Command {
     this.isBusy = true;
     try {
       const prompt = args._.slice(1).join(" ");
+      if (!prompt) throw InvalidUsageError();
       const predictionUrl = await aiService.generateImage(prompt);
+
       const media = await MessageMedia.fromUrl(predictionUrl, {
         unsafeMime: true,
       });
-      await message.replyWithReactions(media);
+      await message.replyWithReactions(media, undefined, undefined, {
+        isViewOnce: true,
+      });
     } catch (e) {
       throw e;
     } finally {

@@ -1,4 +1,10 @@
-class PermissionDeniedError extends Error {
+class AppError extends Error {
+  constructor(message) {
+    super(message);
+  }
+}
+
+class PermissionDeniedError extends AppError {
   constructor() {
     super("Permission Denied.");
     this.name = "PermissionDeniedError";
@@ -7,7 +13,7 @@ class PermissionDeniedError extends Error {
   }
 }
 
-class InvalidUsageError extends Error {
+class InvalidUsageError extends AppError {
   constructor() {
     super("Invalid Usage.");
     this.name = "InvalidUsageError";
@@ -16,7 +22,7 @@ class InvalidUsageError extends Error {
   }
 }
 
-class IncompleteOperationError extends Error {
+class IncompleteOperationError extends AppError {
   constructor() {
     super("Operation could not be completed successfully.");
     this.name = "IncompleteOperationError";
@@ -25,7 +31,7 @@ class IncompleteOperationError extends Error {
   }
 }
 
-class TooManyRequestsError extends Error {
+class TooManyRequestsError extends AppError {
   constructor() {
     super("Too many requests.");
     this.name = "TooManyRequestsError";
@@ -39,4 +45,5 @@ module.exports = {
   InvalidUsageError,
   IncompleteOperationError,
   TooManyRequestsError,
+  AppError,
 };

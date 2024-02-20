@@ -1,6 +1,6 @@
 const { MessageMedia } = require("whatsapp-web.js");
 const Command = require("./Command");
-const chartService = require("../../../../services/chart");
+const chartService = require("../../../../services/dataview/chart");
 const statsData = require("../../../data/statsData");
 
 class Stats extends Command {
@@ -25,7 +25,10 @@ class Stats extends Command {
       dataset.activeUsers,
       dataset.stats
     );
-    const media = await MessageMedia.fromUrl(chartUrl, { unsafeMime: true });
+    const media = await MessageMedia.fromUrl(chartUrl, {
+      unsafeMime: true,
+      filename: "chart.png",
+    });
     await message.replyWithReactions(media, ["📊", "🤖"], undefined, {
       isViewOnce: true,
     });

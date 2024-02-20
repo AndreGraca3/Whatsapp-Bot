@@ -9,6 +9,7 @@ const config = {
   NOSTALGIA_GROUP_ID: process.env.NOSTALGIA_GROUP_ID,
   nostalgicMediaPath: process.env.NOSTALGIC_MEDIA_PATH,
   fortniteMediaPath: process.env.FORTNITE_MEDIA_PATH,
+  AI_IMAGE_API_TOKEN: process.env.AI_IMAGE_API_TOKEN,
 };
 
 function validateConfig() {

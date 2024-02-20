@@ -1,7 +1,7 @@
 const QuickChart = require("quickchart-js");
 
 module.exports = {
-  generateBarChart(title, users, dataSets) {
+  generateBarChart(title, userIds, dataSets) {
     const chart = new QuickChart();
     chart.setConfig({
       type: "bar",
@@ -12,14 +12,10 @@ module.exports = {
         },
       },
       data: {
-        labels: users,
+        labels: userIds,
         datasets: Object.entries(dataSets).map(([label, data]) => ({
           label: label,
-          data: users.reduce((result, user) => {
-            const count = data[user];
-            if (count) result.push(count);
-            return result;
-          }, []),
+          data: userIds.map((userId) => data[userId]),
         })),
       },
     });

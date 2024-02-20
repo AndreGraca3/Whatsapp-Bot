@@ -5,6 +5,7 @@ const {
 const { MessageMedia } = require("whatsapp-web.js");
 const { promises } = require("fs");
 const Command = require("./Command.js");
+const { InvalidUsageError } = require("../../../exceptions/exceptions.js");
 
 class Nostalgia extends Command {
   constructor() {
@@ -12,7 +13,8 @@ class Nostalgia extends Command {
   }
 
   async handle(message) {
-    if (!message.fromMe && message.from != NOSTALGIA_GROUP_ID) return;
+    if (!message.fromMe && message.from != NOSTALGIA_GROUP_ID) throw new InvalidUsageError()
+
     const nostalicMedia = await promises.readdir(nostalgicMediaPath);
     const randomMedia =
       nostalicMedia[Math.floor(Math.random() * nostalicMedia.length)];
